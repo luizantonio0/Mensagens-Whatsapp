@@ -28,3 +28,4 @@ C:\Users\lantonio\Documents\VSCODE\CSharp\Mensagens Whatsapp\WppMensage\obj\Debu
 C:\Users\lantonio\Documents\VSCODE\CSharp\Mensagens Whatsapp\WppMensage\obj\Debug\net9.0\WppMensage.pdb
 C:\Users\lantonio\Documents\VSCODE\CSharp\Mensagens Whatsapp\WppMensage\obj\Debug\net9.0\WppMensage.genruntimeconfig.cache
 C:\Users\lantonio\Documents\VSCODE\CSharp\Mensagens Whatsapp\WppMensage\obj\Debug\net9.0\ref\WppMensage.dll
+C:\Users\lantonio\Documents\VSCODE\CSharp\Mensagens Whatsapp\WppMensage\obj\Debug\net9.0\WppMensage.sourcelink.json

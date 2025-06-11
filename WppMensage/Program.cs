@@ -1,45 +1,57 @@
-﻿using System;
-using System.IO;
-using WppMensage.Entity;
+﻿using WppMensage.Entity;
 using OfficeOpenXml;
 
 class Program
 {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
-        string filePath = "C:\\Users\\lantonio\\Documents\\VSCODE\\CSharp\\Mensagens Whatsapp\\Planilha\\Controle Liberação de ponto.xlsx";
+        
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
 
         ExcelPackage.License.SetNonCommercialOrganization("My Noncommercial organization");
+        bool itWorked = false;
 
-        FileInfo file = new FileInfo(filePath);
-
-        using (ExcelPackage pack = new ExcelPackage(file))
+        using (var client = new HttpClient())
         {
-            ExcelWorksheet ws = pack.Workbook.Worksheets[0];
+            byte[] excelData = await client.GetByteArrayAsync("https://docs.google.com/spreadsheets/d/1m199_EDPHCn_rET8IQVVf-7sZbockIjZ6ahIjJtdzgU/export?format=xlsx");
 
-            int colCount = ws.Dimension.End.Column;
-            int rowCount = ws.Dimension.End.Row;
-
-            for (int row = 1; row <= rowCount; row++)
+            using (var stream = new MemoryStream(excelData))
+            using (var pack = new ExcelPackage(stream))
             {
-                try
+                ExcelWorksheet ws = pack.Workbook.Worksheets[0];
+
+                int colCount = ws.Dimension.End.Column;
+                int rowCount = ws.Dimension.End.Row;
+
+                for (int row = 1; row <= rowCount; row++)
                 {
-                    //ws.Cells[row, 6].Value.ToString(), ws.Cells[row, 7].Value.ToString(), 
-                    var pessoa = new Person(ws.Cells[row, 10].Value.ToString());
-
-                    if (pessoa.status.Equals("Mandar Mensagem"))
+                    try
                     {
-                        pessoa.name = ws.Cells[row, 6].Value.ToString();
-                        pessoa.client = ws.Cells[row, 7].Value.ToString();
+                        var pessoa = new Person(ws.Cells[row, 10].Value.ToString());
 
-                        Console.WriteLine("\n\n======================================================================================\n\n");
+                        if (pessoa.status.Equals("Mandar Mensagem"))
+                        {
+                            pessoa.name = ws.Cells[row, 6].Value.ToString() ?? "";
+                            pessoa.client = ws.Cells[row, 7].Value.ToString() ?? "";
 
-                        Console.WriteLine(GetMensage(GetNome(pessoa.name).Trim(), GetEmpresa(pessoa.client.Replace("-", "_").Replace("/", "_"), 0)));   
+                            Console.WriteLine("\n\n======================================================================================\n\n");
+
+                            Console.WriteLine(GetMensage(GetNome(pessoa.name).Trim(), GetEmpresa(pessoa.client.Replace("-", "_").Replace("/", "_"), 0)));
+                            itWorked = true;
+                        }
                     }
+                    catch (Exception) { continue; }
                 }
-                catch (Exception) { continue; }
             }
         }
+
+        if (!itWorked)
+        {
+            Console.Write("Não Encontrou nenhuma Situação (Mandar Mensagem)\n");
+        }
+        
+        
+        Console.ReadLine();
     }
     public static string GetEmpresa(string nomeEmpresa, int errosOcorridos)
     {
@@ -64,15 +76,15 @@ class Program
 
                 Para registrar o ponto corretamente, siga estas etapas:
 
-                1️⃣ Posicione seu rosto corretamente em frente ao tablet.
-                2️⃣ O sistema solicitará uma senha 🔒 → digite os quatro primeiros dígitos do seu CPF.
-                3️⃣ Clique em "OK" para confirmar.
+                1️⃣  Posicione seu rosto corretamente em frente ao tablet.
+                2️⃣  O sistema solicitará uma senha 🔒 → digite os quatro primeiros dígitos do seu CPF.
+                3️⃣  Clique em "OK" para confirmar.
 
                 📌 Lembre-se de registrar o ponto nos seguintes momentos:
-                ✔️ Entrada no expediente
-                ✔️ Saída para intervalo
-                ✔️ Retorno do intervalo
-                ✔️ Saída ao final do expediente
+                ✔️  Entrada no expediente
+                ✔️  Saída para intervalo
+                ✔️  Retorno do intervalo
+                ✔️  Saída ao final do expediente
                 """;
     }
 
@@ -95,6 +107,10 @@ class Program
             {
                 nome = nome.Substring(3);
             }
+            if (nome[2] == ' ')
+            {
+                nome = nome.Substring(2);
+            }
         }
         catch (Exception)
         {
@@ -103,7 +119,7 @@ class Program
         return nome;
     }
     
-    public static string[] GetNomeAndEmpresa(String linhaOriginal)
+    public static string[] GetNomeAndEmpresaCSV(String linhaOriginal)
     {
         string[] nomes = new string[2];
         var splitLine = linhaOriginal.Split(",");
@@ -111,7 +127,6 @@ class Program
         nomes[1] = splitLine[6];
 
         // Tem "," na planilha e isso confunde o csv: var status = splitLine[10];
-
 
         try
         {

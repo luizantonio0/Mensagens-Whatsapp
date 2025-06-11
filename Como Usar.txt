@@ -1,0 +1,3 @@
+Abra a planilha https://docs.google.com/spreadsheets/d/1m199_EDPHCn_rET8IQVVf-7sZbockIjZ6ahIjJtdzgU/edit?usp=sharing
+
+marque a situação das pessoa que deseja criar a mensagem como "Mandar Mensagem", e depois rode o programa

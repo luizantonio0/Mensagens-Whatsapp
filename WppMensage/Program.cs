@@ -36,7 +36,7 @@ class Program
 
                             Console.WriteLine("\n\n======================================================================================\n\n");
 
-                            Console.WriteLine(GetMensage(GetNome(pessoa.name).Trim(), GetEmpresa(pessoa.client.Replace("-", "_").Replace("/", "_"), 0)));
+                            Console.WriteLine(GetMensage(GetNome(pessoa.name).Trim(), await GetEmpresa(pessoa.client.Replace("-", "_").Replace("/", "_"), 0)));
                             itWorked = true;
                         }
                     }
@@ -53,18 +53,18 @@ class Program
         
         Console.ReadLine();
     }
-    public static string GetEmpresa(string nomeEmpresa, int errosOcorridos)
+    public async static Task<string> GetEmpresa(string nomeEmpresa, int errosOcorridos)
     {
         try
         {
             var empresaContratante = (EmpresaContratante)Enum.Parse(typeof(EmpresaContratante), nomeEmpresa);
-            return EmpresaExtensions.ToCustomString(empresaContratante.GetEmpresa());
+            return await Task.FromResult(EmpresaExtensions.ToCustomString(empresaContratante.GetEmpresa()));
         }
         catch (Exception)
         {
             errosOcorridos++;
         }
-        return "(Empresa Não encontrada)";
+        return await Task.FromResult("(Empresa Não encontrada)");
     }
 
     public static string GetMensage(string nome, string empresa)

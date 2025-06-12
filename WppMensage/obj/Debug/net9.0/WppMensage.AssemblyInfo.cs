@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WppMensage")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f2e0c1a7de4f538bdf8c50270ebe4e4169f3fc84")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+617b1f3edac03638ae49bbad0e843aa711896e33")]
 [assembly: System.Reflection.AssemblyProductAttribute("WppMensage")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WppMensage")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
